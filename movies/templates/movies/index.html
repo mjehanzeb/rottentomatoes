@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Search Movie{% endblock %}
+
+{% block content %}
+
+<form action="" method="get" class="form-search">
+	<div class="input-append">
+		<input type="text" value="{{ q }}"class=" search-query input-xxlarge" name="q" id="q" placeholder="type movie name to search">
+		<button type="submit" class="btn btn-primary">Search</button>
+	</div>
+</form>
+{% if movie_list %}
+<caption>Found <strong>{{movie_list|length}}</strong> movie{{ movie_list|pluralize }} for <strong>{{q}}</strong>' : </caption>
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Poster</th>
+      <th width="250">Movie Title</th>
+      <th>Year Release</th>
+      <th>Details</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for movie in movie_list %}
+    {% url 'movies.views.movie' movie.id as movie_link %}
+    <tr style="cursor:pointer;" onclick="location.href='{{ movie_link }}'">
+    <td>{{ forloop.counter }}</td>
+      <td><img src="{{movie.posters.thumbnail}}" alt="{{movie.title}}" class="img-rounded"/></td>
+      <td>{{movie.title}}</td>
+      <td>{{movie.year}}</td>
+      <td><i class="icon-film"></i></td>
+    </tr>
+   {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+
+{% endblock %}
+
