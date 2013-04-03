@@ -2,9 +2,9 @@
 
 import requests
 
-API_KEY = 'v42gy6vz74y2xjaxe7gf92k5'
+API_KEY = ''
 API_BASE_URL = 'http://api.rottentomatoes.com/api/public/v1.0/'
-PAGE_LIMIT = 1
+PAGE_LIMIT = 5
 
 def get_movies(search_term):
 
@@ -43,6 +43,7 @@ def get_movie_detail(movie_id):
 
 def save_movie(movie):
 	
+	from django.utils import simplejson
 	from movies import models
 
 	movie_object = models.Movie() # Initialize movie object
@@ -50,9 +51,12 @@ def save_movie(movie):
 		if field.name != 'id':
 			setattr(movie_object, field.name, movie.get(field.name, None))
 
+		if isinstance(movie.get(field.name, None), dict):
+			setattr(movie_object, field.name, simplejson.dumps(movie.get(field.name, None)))
+
 		if movie.get('id', None):
 			setattr(movie_object, 'movie_id', movie.get('id', None))
-
+		
 	m = movie_object.save()
 	
 	for genre in movie['genres']:

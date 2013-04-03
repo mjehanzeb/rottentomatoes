@@ -1,6 +1,10 @@
-from django.db import models
+
 import datetime
+
+from django.db import models
 from django.utils import timezone
+from django.utils import simplejson
+
 
 class Actor(models.Model):
  
@@ -14,7 +18,7 @@ class Genre(models.Model):
     name = models.CharField(max_length=100)
 
     def __unicode__(self):
-		return self.name	
+		return self.name
 
  
 class Movie(models.Model):
@@ -25,12 +29,8 @@ class Movie(models.Model):
     year = models.IntegerField()
     mpaa_rating = models.CharField(max_length=2)
     runtime = models.IntegerField()
-    release_date_theater = models.DateField(blank=True, null=True)
-    release_date_dvd = models.DateField(blank=True, null=True)
-    poster_thumbnail = models.CharField(max_length=255, null=True)
-    poster_profile = models.CharField(max_length=255, null=True)
-    poster_detailed = models.CharField(max_length=255, null=True)
-    poster_original = models.CharField(max_length=255, null=True)
+    posters = models.TextField(blank=True, null=True)
+    release_dates = models.TextField(blank=True, null=True)
 
     genres = models.ManyToManyField(Genre)
     actors = models.ManyToManyField(Actor)
@@ -39,13 +39,9 @@ class Movie(models.Model):
     def __unicode__(self):
 		return self.title		
 
+    def format_movie(self):
+        self.id = self.movie_id
+        self.posters = dict(simplejson.loads(self.posters))
+        self.release_dates = dict(simplejson.loads(self.release_dates))
 
-"""class Cast(models.Model):
-
-	actor = models.ForeignKey(Actor)
-	movie = models.ForeignKey(Movie)
-	characters = models.CharField(max_length=100)
-
-	def __unicode__(self):
-		return self.characters	
-"""
+        return self

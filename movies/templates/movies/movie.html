@@ -4,8 +4,6 @@
 
 {% block content %}
 
-{{movie}}
-
 {% if movie %}
 
 <ul class="nav nav-pills">
@@ -39,19 +37,32 @@
                     <table class="table table-bordered">
                       <tr>
                           <td >
-                            {{movie.mpaa_rating}} {{movie.runtime}}
+                            Rating: {{movie.mpaa_rating}} 
                           </td>
                             <td>
-                              In Theaters: {{movie.release_dates.theater}}
+                              Runtime: {{movie.runtime}}
                             </td>
                       </tr>
                       <tr>
-                          <td >
-                            Directed by: {{movie.mpaa_rating}} 
+                          <td colspan="2"> Release Dates: </td>
+                      </tr>
+                      <tr>
+                          <td colspan="2">
+                           
+                            {% if movie.release_dates.theater %}
+                            <div class="row-fluid">
+                              <div class="span4">In Theaters:</div>
+                              <div class="span8">{{movie.release_dates.theater}}</div>
+                            </div>
+                            {% endif %}
+                            
+                            {% if movie.release_dates.dvd %}
+                            <div class="row-fluid">
+                              <div class="span4">DVD:</div>
+                              <div class="span8">{{movie.release_dates.dvd}}</div>
+                            </div>
+                            {% endif %}
                           </td>
-                            <td>
-                              In Theaters: {{movie.release_dates.theater}}
-                            </td>
                       </tr>
                     </table>
                 </td>
