@@ -2,7 +2,7 @@
 
 import requests
 
-API_KEY = ''
+API_KEY = '' # Insert Here RottenTomatoes API key
 API_BASE_URL = 'http://api.rottentomatoes.com/api/public/v1.0/'
 PAGE_LIMIT = 5
 
