@@ -2,7 +2,7 @@
 
 import requests
 
-API_KEY = '' # Insert Here RottenTomatoes API key
+API_KEY = 'v42gy6vz74y2xjaxe7gf92k5' # Insert Here RottenTomatoes API key
 API_BASE_URL = 'http://api.rottentomatoes.com/api/public/v1.0/'
 PAGE_LIMIT = 5
 
@@ -67,5 +67,36 @@ def save_movie(movie):
 		actor_object, created = models.Actor.objects.get_or_create(name=cast['name'])
 		movie_object.actors.add(actor_object)
 	
+def movie_mixin(cost, genre):
 
-            
+	from random import choice
+	
+	from movies import models
+
+	genre_liquor_map = {'Animation' : 'Non-Alcoholic', 'Classics' : 'Wine', 'Comedy' : 'Lager', 'Documentary' : 'Beer'}
+	liquor_type = genre_liquor_map.get(genre, 'Beer')
+
+	movie_list = lcbo_products = []
+	data = {}
+
+	lcbo_api_url = 'http://lcboapi.com/products?per_page=100';
+	response = requests.get(lcbo_api_url)
+
+	if response.status_code == requests.codes.ok and liquor_type:
+		lcbo_response = response.json()
+		for lcbo_product in lcbo_response['result']:
+			if (lcbo_product['price_in_cents'] <= cost * 100) and (liquor_type == lcbo_product['primary_category'] or liquor_type == lcbo_product['secondary_category']):
+				lcbo_products.append({'lcbo_product_name': lcbo_product['name'],
+									'price': lcbo_product['price_in_cents'] / 100,
+									})
+
+		#pick a random product
+		if lcbo_products:
+			lcbo_product = choice(lcbo_products)
+
+			movie_list = models.Movie.objects.filter(genres__name=genre).values()
+			if movie_list:
+				movie = choice(movie_list)
+				data = dict(movie.items() + lcbo_product.items())
+
+	return data
