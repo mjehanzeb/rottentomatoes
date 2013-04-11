@@ -74,7 +74,7 @@ def movie_mixin(cost, genre):
 	from movies import models
 
 	genre_liquor_map = {'Animation' : 'Non-Alcoholic', 'Classics' : 'Wine', 'Comedy' : 'Lager', 'Documentary' : 'Beer'}
-	liquor_type = genre_liquor_map.get(genre, 'Beer')
+	liquor_type = genre_liquor_map.get(genre, 'Beer')  # Make Beer as default category
 
 	movie_list = lcbo_products = []
 	data = {}
@@ -90,7 +90,7 @@ def movie_mixin(cost, genre):
 									'price': lcbo_product['price_in_cents'] / 100,
 									})
 
-		#pick a random product
+		#pick a random product and movie
 		if lcbo_products:
 			lcbo_product = choice(lcbo_products)
 

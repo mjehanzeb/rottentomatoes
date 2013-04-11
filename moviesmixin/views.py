@@ -8,7 +8,7 @@ from movies import api
 
 def index(request):
 
-	movie_list = [] # Movie list 
+	data = [] # Movie list 
 	context = {}
 	
 	cost = request.GET.get('cost', '')
@@ -17,7 +17,6 @@ def index(request):
 	context['cost'] = cost
 	context['genre_selected'] = genre
 	context['genre_list'] = models.Genre.objects.all().order_by('name')
-
 
 	if cost and genre:
 		data = api.movie_mixin(float(cost), genre)
