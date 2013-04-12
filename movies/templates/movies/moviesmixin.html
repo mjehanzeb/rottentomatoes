@@ -22,6 +22,8 @@
 </select>
  <button type="submit" class="btn btn-primary">Submit</button>
 </form>
+{% if genre_selected and cost %}
+
 {% if data %}
 <caption>Found <strong>awesome</strong> movie for <strong>{{genre_selected}}</strong> and in the budget of <strong>${{ cost }}</strong> : </caption>
 <table class="table table-hover">
@@ -38,10 +40,15 @@
       <td>{{data.title}}</td>
       <td>{{data.year}}</td>
       <td>{{data.lcbo_product_name}}</td>
-      <th>{{data.price}}</th>
+      <th>${{data.price}}</th>
     </tr>
   </tbody>
 </table>
+{% else %}
+
+<div class="row" style="margin-left: 0;"><p class="text-error">No record found, please select another Genre</p></div>
+{% endif %}
+
 {% endif %}
 
 {% endblock %}
